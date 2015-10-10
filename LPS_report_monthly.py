@@ -1,28 +1,3 @@
-#!/usr/bin/env python
-
-#
-# weekly-report
-#
-# Extract JIRA status to generate a template weekly report
-#
-
-#
-# TODO: 
-#
-#  - Add command line processing (configurable time windows,
-#    include URL in draft versions of reports to make it quicker
-#    to update engineering status fields, restrict to single
-#    engineer).
-#
-#  - Improve processing of idiomatic text from engineering status
-#    field (more flexibility on numbers, stripping out of dates to
-#    I don't have to manually reflow text).
-#
-#  - Bring the final loops into the report class.
-#
-#  - Include KWG cards assigned to me in the report.
-#
-
 from __future__ import print_function
 
 import datetime
@@ -313,8 +288,8 @@ log = logging.getLogger()
 
 
 #PARAMETERS------------------------------------------------
-dict = {"2015-02-01":"2015-02-28", "2015-03-01":"2015-03-31", "2015-04-01":"2015-04-30", "2015-05-01":"2015-05-31", "2015-06-01":"2015-06-30", "2015-07-01":"2015-07-31", "2015-08-01":"2015-08-31"}
-ticks = ('February 2015', 'March 2015', 'April 2015', 'May 2015', 'June 2015', 'July 2015', 'August 2015')
+dict = {"2015-02-01":"2015-02-28", "2015-03-01":"2015-03-31", "2015-04-01":"2015-04-30", "2015-05-01":"2015-05-31", "2015-06-01":"2015-06-30", "2015-07-01":"2015-07-31", "2015-08-01":"2015-08-31", "2015-09-01":"2015-09-30"}
+ticks = ('February', 'March', 'April', 'May', 'June', 'July', 'August', 'September')
 
 
 #DO NOT CHANGE-------------------------------------------
@@ -369,7 +344,7 @@ rects2 = plt.bar(index + bar_width, means_closed, bar_width,alpha=opacity,color=
 
 plt.xlabel('Time')
 plt.ylabel('Work (Cards & Blueprints)')
-plt.title('Linaro Premium Services: Work Summary')
+plt.title('Premium Services Engineering: Work Summary')
 plt.grid(zorder=0)
 plt.xticks(index + bar_width, ticks)
 plt.ylim(0,40)
