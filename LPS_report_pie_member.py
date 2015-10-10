@@ -32,6 +32,8 @@ import keyring
 import re
 import textwrap
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 class UTC(datetime.tzinfo):
     ZERO = datetime.timedelta(0)
@@ -299,16 +301,13 @@ class Report(object):
 
 
 # Connect to the server
-server = 'https://cards.linaro.org'
+server = 'https://projects.linaro.org'
 username = 'jason.liu@linaro.org'
 password = 'xxxx'
-# To store the password, run this from an interactive python session
-# import keyring; keyring.set_password(server, username, "mysecret")
-# password = keyring.get_password(server, username)
 jira = JIRA(options={'server': server}, basic_auth=(username, password))
 
-since = '2015-08-31'
-until = '2015-09-18'
+since = '2015-09-01'
+until = '2015-09-30'
 
 def worklog(issues):
     sum_effort = 0
@@ -334,7 +333,7 @@ def worklog(issues):
                         
 
 # member---------------------------
-query = 'project = PS AND component = Actions'
+query = 'project = PSE AND component = Actions'
 all = jira.search_issues(query)
 report = Report(jira)
 w_1 = worklog(all)
@@ -343,7 +342,7 @@ report.print('[Jason] sum of Actions:-------- %d' %(w_1))
 
 
 # member---------------------------
-query = 'project = PS AND component = Hisilicon'
+query = 'project = PSE AND component = Hisilicon'
 all = jira.search_issues(query)
 report = Report(jira)
 w_2 = worklog(all)
@@ -352,7 +351,7 @@ report.print('[Jason] sum of Hisilicon:-------- %d' %(w_2))
 
 
 # member---------------------------
-query = 'project = PS AND component = Linaro'
+query = 'project = PSE AND component = Linaro'
 all = jira.search_issues(query)
 report = Report(jira)
 w_3 = worklog(all)
@@ -361,7 +360,7 @@ report.print('[Jason] sum of Linaro:-------- %d' %(w_3))
 
 
 # member---------------------------
-query = 'project = PS AND component = MediaTek'
+query = 'project = PSE AND component = MediaTek'
 all = jira.search_issues(query)
 report = Report(jira)
 w_4 = worklog(all)
@@ -370,7 +369,7 @@ report.print('[Jason] sum of MediaTek:-------- %d' %(w_4))
 
 
 # member---------------------------
-query = 'project = PS AND component = Qualcomm'
+query = 'project = PSE AND component = Qualcomm'
 all = jira.search_issues(query)
 report = Report(jira)
 w_5 = worklog(all)
@@ -379,7 +378,7 @@ report.print('[Jason] sum of Qualcomm:-------- %d' %(w_5))
 
 
 # member---------------------------
-query = 'project = PS AND component = Spreadtrum'
+query = 'project = PSE AND component = Spreadtrum'
 all = jira.search_issues(query)
 report = Report(jira)
 w_6 = worklog(all)
@@ -388,7 +387,7 @@ report.print('[Jason] sum of Spreadtrum:-------- %d' %(w_6))
 
 
 # member---------------------------
-query = 'project = PS AND component = TI'
+query = 'project = PSE AND component = TI'
 all = jira.search_issues(query)
 report = Report(jira)
 w_7 = worklog(all)
@@ -397,27 +396,32 @@ report.print('[Jason] sum of TI:-------- %d' %(w_7))
 
 
 # member---------------------------
-query = 'project = PS AND component = ZTE'
+query = 'project = PSE AND component = ZTE'
 all = jira.search_issues(query)
 report = Report(jira)
 w_8 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of ZTE:-------- %d' %(w_8))
 
-
 w = w_1+w_2+w_3+w_4+w_5+w_6+w_7+w_8
- 
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 # The slices will be ordered and plotted counter-clockwise.
 labels = 'Actions (%1.1f%%)' %(100*(w_1/float(w))), 'Hisilicon (%1.1f%%)' %(100*(w_2/float(w))), 'Linaro (%1.1f%%)' %(100*(w_3/float(w))), 'MediaTek (%1.1f%%)' %(100*(w_4/float(w))), 'Qualcomm (%1.1f%%)' %(100*(w_5/float(w))), 'Spreadtrum (%1.1f%%)' %(100*(w_6/float(w))), 'TI (%1.1f%%)' %(100*(w_7/float(w))), 'ZTE (%1.1f%%)' %(100*(w_8/float(w)))
 sizes = [w_1, w_2, w_3, w_4, w_5, w_6, w_7, w_8]
 colors = ['green', 'yellowgreen', 'gold', 'yellow', 'lightskyblue', 'blue', 'lightcoral', 'pink']
 
-plt.pie(sizes, labels=labels, colors=colors, startangle=90)
+patches, texts = plt.pie(sizes, labels=labels, colors=colors, startangle=60)
+texts[0].set_fontsize(10)
+texts[1].set_fontsize(10)
+texts[2].set_fontsize(10)
+texts[3].set_fontsize(10)
+texts[4].set_fontsize(10)
+texts[5].set_fontsize(10)
+texts[6].set_fontsize(10)
+texts[7].set_fontsize(10)
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: February-August 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Linaro Premium Services: Work Summary By Member' + '\n' + '\n')
+plt.text(0.6, -1.2, 'Period: Sep-1 to Sep-30 2015', color='black', fontsize=12, fontweight='bold')
+plt.title('Premium Services Engineering: Work Summary By Member' + '\n' + '\n')
 
 plt.show()
