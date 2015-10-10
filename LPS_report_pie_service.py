@@ -32,6 +32,8 @@ import keyring
 import re
 import textwrap
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 class UTC(datetime.tzinfo):
     ZERO = datetime.timedelta(0)
@@ -299,73 +301,97 @@ class Report(object):
 
 
 # Connect to the server
-server = 'https://cards.linaro.org'
+server = 'https://projects.linaro.org'
 username = 'jason.liu@linaro.org'
 password = 'xxxx'
-# To store the password, run this from an interactive python session
-# import keyring; keyring.set_password(server, username, "mysecret")
-# password = keyring.get_password(server, username)
 jira = JIRA(options={'server': server}, basic_auth=(username, password))
 
-end_date = '2015-08-31'
+since = '2015-09-01'
+until = '2015-09-30'
+
+def worklog(issues):
+    sum_effort = 0
+    for issue_id in issues:
+        for logid in jira.worklogs(issue_id):
+            time_spent = jira.worklog(issue_id, logid).timeSpent
+            start_date = jira.worklog(issue_id, logid).started            
+            start_date = start_date[:10]
+            if int(start_date.replace('-', '')) >= int(since.replace('-', '')) and int(start_date.replace('-', '')) <= int(until.replace('-', '')):
+                #report.print('work_timestamp:-------- %s' %(start_date))
+                #report.print('               -------- %s' %(time_spent))
+                for i in range(len(time_spent)):
+                    if time_spent[i] == 'w':
+                        sum_effort = sum_effort + int(time_spent[i-1])*5*8*60
+                    if time_spent[i] == 'd':
+                        sum_effort = sum_effort + int(time_spent[i-1])*8*60
+                    if time_spent[i] == 'h':
+                        sum_effort = sum_effort + int(time_spent[i-1])*60
+                    if time_spent[i] == 'm':
+                        sum_effort = sum_effort + int(time_spent[i-1])
+    #report.print('sum-------- %d' %(sum_effort))
+    return sum_effort
+                  
 
 # member---------------------------
-query = 'project = PS AND created >= 2015-01-01 AND created <= ' + end_date + ' AND component = "Member Build"'
+query = 'project = PSE AND component = "Member Build"'
 all = jira.search_issues(query)
 report = Report(jira)
-w_1 = len(all)
+w_1 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Member Build:-------- %d' %(w_1))
 
 
 # member---------------------------
-query = 'project = PS AND created >= 2015-01-01 AND created <= ' + end_date + ' AND component = 96Boards'
+query = 'project = PSE AND component = 96Boards'
 all = jira.search_issues(query)
 report = Report(jira)
-w_2 = len(all)
+w_2 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of 96Boards:-------- %d' %(w_2))
 
 
 # member---------------------------
-query = 'project = PS AND created >= 2015-01-01 AND created <= ' + end_date + ' AND component = "Engineering works"'
+query = 'project = PSE AND component = "Engineering works"'
 all = jira.search_issues(query)
 report = Report(jira)
-w_3 = len(all)
+w_3 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Engineering works:-------- %d' %(w_3))
 
 
 # member---------------------------
-query = 'project = PS AND created >= 2015-01-01 AND created <= ' + end_date + ' AND component = LAVA'
+query = 'project = PSE AND component = LAVA'
 all = jira.search_issues(query)
 report = Report(jira)
-w_4 = len(all)
+w_4 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of LAVA:-------- %d' %(w_4))
 
 
 # member---------------------------
-query = 'project = PS AND created >= 2015-01-01 AND created <= ' + end_date + ' AND component = Training'
+query = 'project = PSE AND component = Training'
 all = jira.search_issues(query)
 report = Report(jira)
-w_5 = len(all)
+w_5 = worklog(all)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Training:-------- %d' %(w_5))
 
 w = w_1+w_2+w_3+w_4+w_5
 
-import numpy as np
-import matplotlib.pyplot as plt
 
 # The slices will be ordered and plotted counter-clockwise.
 labels = 'Member Build (%1.1f%%)' %(100*(w_1/float(w))), '96Boards (%1.1f%%)' %(100*(w_2/float(w))), 'Miscellaneous engineering work (%1.1f%%)' %(100*(w_3/float(w))), 'LAVA (%1.1f%%)' %(100*(w_4/float(w))), 'Training (%1.1f%%)' %(100*(w_5/float(w)))
 sizes = [w_1, w_2, w_3, w_4, w_5]
 colors = ['green', 'yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
 
-plt.pie(sizes, labels=labels, colors=colors, startangle=90)
+patches, texts = plt.pie(sizes, labels=labels, colors=colors, startangle=90)
+texts[0].set_fontsize(10)
+texts[1].set_fontsize(10)
+texts[2].set_fontsize(10)
+texts[3].set_fontsize(10)
+texts[4].set_fontsize(10)
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: February-August 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Linaro Premium Services: Work Summary By Service Type' + '\n')
+plt.text(0.6, -1.2, 'Period: Sep-1 to Sep-30 2015', color='black', fontsize=12, fontweight='bold')
+plt.title('Premium Services Engineering: Work Summary By Service Type' + '\n' + '\n')
 
 plt.show()
