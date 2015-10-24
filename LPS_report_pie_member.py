@@ -306,7 +306,7 @@ username = 'jason.liu@linaro.org'
 password = 'xxxx'
 jira = JIRA(options={'server': server}, basic_auth=(username, password))
 
-since = '2015-09-01'
+since = '2015-08-01'
 until = '2015-09-30'
 
 def worklog(issues):
@@ -331,12 +331,15 @@ def worklog(issues):
     #report.print('sum-------- %d' %(sum_effort))
     return sum_effort
                         
-
+labels=[]
+sizes=[]
+wl=[]
 # member---------------------------
 query = 'project = PSE AND component = Actions'
 all = jira.search_issues(query)
 report = Report(jira)
 w_1 = worklog(all)
+wl.append(w_1)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Actions:-------- %d' %(w_1))
 
@@ -346,6 +349,7 @@ query = 'project = PSE AND component = Hisilicon'
 all = jira.search_issues(query)
 report = Report(jira)
 w_2 = worklog(all)
+wl.append(w_2)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Hisilicon:-------- %d' %(w_2))
 
@@ -355,6 +359,7 @@ query = 'project = PSE AND component = Linaro'
 all = jira.search_issues(query)
 report = Report(jira)
 w_3 = worklog(all)
+wl.append(w_3)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Linaro:-------- %d' %(w_3))
 
@@ -364,6 +369,7 @@ query = 'project = PSE AND component = MediaTek'
 all = jira.search_issues(query)
 report = Report(jira)
 w_4 = worklog(all)
+wl.append(w_4)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of MediaTek:-------- %d' %(w_4))
 
@@ -373,6 +379,7 @@ query = 'project = PSE AND component = Qualcomm'
 all = jira.search_issues(query)
 report = Report(jira)
 w_5 = worklog(all)
+wl.append(w_5)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Qualcomm:-------- %d' %(w_5))
 
@@ -382,6 +389,7 @@ query = 'project = PSE AND component = Spreadtrum'
 all = jira.search_issues(query)
 report = Report(jira)
 w_6 = worklog(all)
+wl.append(w_6)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Spreadtrum:-------- %d' %(w_6))
 
@@ -391,6 +399,7 @@ query = 'project = PSE AND component = TI'
 all = jira.search_issues(query)
 report = Report(jira)
 w_7 = worklog(all)
+wl.append(w_7)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of TI:-------- %d' %(w_7))
 
@@ -400,28 +409,60 @@ query = 'project = PSE AND component = ZTE'
 all = jira.search_issues(query)
 report = Report(jira)
 w_8 = worklog(all)
+wl.append(w_8)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of ZTE:-------- %d' %(w_8))
 
 w = w_1+w_2+w_3+w_4+w_5+w_6+w_7+w_8
+wl.sort(reverse = True)
+
+
+flag1, flag2, flag3, flag4, flag5, flag6, flag7, flag8 = 0,0,0,0,0,0,0,0
+for i in range(len(wl)):
+    if wl[i] == w_1 and wl[i]!= 0 and flag1 == 0:
+        labels.append('Actions (%1.1f%%)' %(100*(w_1/float(w))))
+        sizes.append(w_1)
+        flag1 = 1
+    if wl[i] == w_2 and wl[i]!= 0 and flag2 == 0:
+        labels.append('Hisilicon (%1.1f%%)' %(100*(w_2/float(w))))
+        sizes.append(w_2)
+        flag2 = 1
+    if wl[i] == w_3 and wl[i]!= 0 and flag3 == 0:
+        labels.append('Linaro (%1.1f%%)' %(100*(w_3/float(w))))
+        sizes.append(w_3)
+        flag3 = 1
+    if wl[i] == w_4 and wl[i]!= 0 and flag4 == 0:
+        labels.append('MediaTek (%1.1f%%)' %(100*(w_4/float(w))))
+        sizes.append(w_4)
+        flag4 = 1
+    if wl[i] == w_5 and wl[i]!= 0 and flag5 == 0:
+        labels.append('Qualcomm (%1.1f%%)' %(100*(w_5/float(w))))
+        sizes.append(w_5)
+        flag5 = 1
+    if wl[i] == w_6 and wl[i]!= 0 and flag6 == 0:
+        labels.append('Spreadtrum (%1.1f%%)' %(100*(w_6/float(w))))
+        sizes.append(w_6)
+        flag6 = 1
+    if wl[i] == w_7 and wl[i]!= 0 and flag7 == 0:
+        labels.append('TI (%1.1f%%)' %(100*(w_7/float(w))))
+        sizes.append(w_7)
+        flag7 = 1
+    if wl[i] == w_8 and wl[i]!= 0 and flag8 == 0:
+        labels.append('ZTE (%1.1f%%)' %(100*(w_8/float(w))))
+        sizes.append(w_8)
+        flag8 = 1
 
 
 # The slices will be ordered and plotted counter-clockwise.
-labels = 'Actions (%1.1f%%)' %(100*(w_1/float(w))), 'Hisilicon (%1.1f%%)' %(100*(w_2/float(w))), 'Linaro (%1.1f%%)' %(100*(w_3/float(w))), 'MediaTek (%1.1f%%)' %(100*(w_4/float(w))), 'Qualcomm (%1.1f%%)' %(100*(w_5/float(w))), 'Spreadtrum (%1.1f%%)' %(100*(w_6/float(w))), 'TI (%1.1f%%)' %(100*(w_7/float(w))), 'ZTE (%1.1f%%)' %(100*(w_8/float(w)))
-sizes = [w_1, w_2, w_3, w_4, w_5, w_6, w_7, w_8]
 colors = ['green', 'yellowgreen', 'gold', 'yellow', 'lightskyblue', 'blue', 'lightcoral', 'pink']
+patches, texts = plt.pie(sizes, colors=colors, startangle=90)
+plt.legend(patches, labels, loc="best")
+leg = plt.gca().get_legend()
+ltext  = leg.get_texts()
+plt.setp(ltext, fontsize='small')
 
-patches, texts = plt.pie(sizes, labels=labels, colors=colors, startangle=60)
-texts[0].set_fontsize(10)
-texts[1].set_fontsize(10)
-texts[2].set_fontsize(10)
-texts[3].set_fontsize(10)
-texts[4].set_fontsize(10)
-texts[5].set_fontsize(10)
-texts[6].set_fontsize(10)
-texts[7].set_fontsize(10)
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: Sep-1 to Sep-30 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Premium Services Engineering: Work Summary By Member' + '\n' + '\n')
+plt.text(0.6, -1.2, 'Period: Aug-Sep 2015', color='black', fontsize=12, fontweight='bold')
+plt.title('Premium Services: Work Summary By Member' + '\n' + '\n')
 
 plt.show()
