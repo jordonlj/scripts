@@ -331,12 +331,15 @@ def worklog(issues):
     #report.print('sum-------- %d' %(sum_effort))
     return sum_effort
                   
-
+labels=[]
+sizes=[]
+wl=[]
 # member---------------------------
 query = 'project = PSE AND component = "Member Build"'
 all = jira.search_issues(query)
 report = Report(jira)
 w_1 = worklog(all)
+wl.append(w_1)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Member Build:-------- %d' %(w_1))
 
@@ -346,6 +349,7 @@ query = 'project = PSE AND component = 96Boards'
 all = jira.search_issues(query)
 report = Report(jira)
 w_2 = worklog(all)
+wl.append(w_2)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of 96Boards:-------- %d' %(w_2))
 
@@ -355,6 +359,7 @@ query = 'project = PSE AND component = "Engineering works"'
 all = jira.search_issues(query)
 report = Report(jira)
 w_3 = worklog(all)
+wl.append(w_3)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Engineering works:-------- %d' %(w_3))
 
@@ -364,6 +369,7 @@ query = 'project = PSE AND component = LAVA'
 all = jira.search_issues(query)
 report = Report(jira)
 w_4 = worklog(all)
+wl.append(w_4)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of LAVA:-------- %d' %(w_4))
 
@@ -373,25 +379,75 @@ query = 'project = PSE AND component = Training'
 all = jira.search_issues(query)
 report = Report(jira)
 w_5 = worklog(all)
+wl.append(w_5)
 report.print('[Jason] member******************************')
 report.print('[Jason] sum of Training:-------- %d' %(w_5))
 
-w = w_1+w_2+w_3+w_4+w_5
 
+# member---------------------------
+query = 'project = PSE AND component = "BSP Analysis"'
+all = jira.search_issues(query)
+report = Report(jira)
+w_6 = worklog(all)
+wl.append(w_6)
+report.print('[Jason] member******************************')
+report.print('[Jason] sum of BSP Analysis:-------- %d' %(w_6))
+
+
+# member---------------------------
+query = 'project = PSE AND component = "Upstream Consultancy"'
+all = jira.search_issues(query)
+report = Report(jira)
+w_7 = worklog(all)
+wl.append(w_7)
+report.print('[Jason] member******************************')
+report.print('[Jason] sum of Upstream Consultancy:-------- %d' %(w_7))
+
+
+w = w_1+w_2+w_3+w_4+w_5+w_6+w_7
+wl.sort(reverse = True)
+
+flag1, flag2, flag3, flag4, flag5, flag6, flag7 = 0,0,0,0,0,0,0
+for i in range(len(wl)):
+    if wl[i] == w_1 and wl[i]!= 0 and flag1 == 0:
+        labels.append('Member Build (%1.1f%%)' %(100*(w_1/float(w))))
+        sizes.append(w_1)
+        flag1 = 1
+    if wl[i] == w_2 and wl[i]!= 0 and flag2 == 0:
+        labels.append('96Boards (%1.1f%%)' %(100*(w_2/float(w))))
+        sizes.append(w_2)
+        flag2 = 1
+    if wl[i] == w_3 and wl[i]!= 0 and flag3 == 0:
+        labels.append('Uncategorized engineering work (%1.1f%%)' %(100*(w_3/float(w))))
+        sizes.append(w_3)
+        flag3 = 1
+    if wl[i] == w_4 and wl[i]!= 0 and flag4 == 0:
+        labels.append('LAVA (%1.1f%%)' %(100*(w_4/float(w))))
+        sizes.append(w_4)
+        flag4 = 1
+    if wl[i] == w_5 and wl[i]!= 0 and flag5 == 0:
+        labels.append('Training (%1.1f%%)' %(100*(w_5/float(w))))
+        sizes.append(w_5)
+        flag5 = 1
+    if wl[i] == w_6 and wl[i]!= 0 and flag6 == 0:
+        labels.append('BSP Analysis (%1.1f%%)' %(100*(w_6/float(w))))
+        sizes.append(w_6)
+        flag6 = 1
+    if wl[i] == w_7 and wl[i]!= 0 and flag7 == 0:
+        labels.append('Upstream Consultancy (%1.1f%%)' %(100*(w_7/float(w))))
+        sizes.append(w_7)
+        flag7 = 1
 
 # The slices will be ordered and plotted counter-clockwise.
-labels = 'Member Build (%1.1f%%)' %(100*(w_1/float(w))), '96Boards (%1.1f%%)' %(100*(w_2/float(w))), 'Miscellaneous engineering work (%1.1f%%)' %(100*(w_3/float(w))), 'LAVA (%1.1f%%)' %(100*(w_4/float(w))), 'Training (%1.1f%%)' %(100*(w_5/float(w)))
-sizes = [w_1, w_2, w_3, w_4, w_5]
-colors = ['green', 'yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
+colors = ['green', 'yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'lightgreen', 'pink']
+patches, texts = plt.pie(sizes, colors=colors, startangle=90)
+plt.legend(patches, labels, loc="best")
+leg = plt.gca().get_legend()
+ltext  = leg.get_texts()
+plt.setp(ltext, fontsize='small')
 
-patches, texts = plt.pie(sizes, labels=labels, colors=colors, startangle=90)
-texts[0].set_fontsize(10)
-texts[1].set_fontsize(10)
-texts[2].set_fontsize(10)
-texts[3].set_fontsize(10)
-texts[4].set_fontsize(10)
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: Sep-1 to Sep-30 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Premium Services Engineering: Work Summary By Service Type' + '\n' + '\n')
+plt.text(0.6, -1.2, 'Period: Sep 2015', color='black', fontsize=12, fontweight='bold')
+plt.title('Premium Services: Work Summary By Service Type' + '\n' + '\n')
 
 plt.show()
