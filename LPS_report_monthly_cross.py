@@ -302,9 +302,9 @@ class Report(object):
 
 
 #PARAMETERS------------------------------------------------
-dict_old = {"2015-02-01":"2015-02-28", "2015-03-01":"2015-03-31", "2015-04-01":"2015-04-30", "2015-05-01":"2015-05-31", "2015-06-01":"2015-06-30", "2015-07-01":"2015-07-31", "2015-08-01":"2015-08-31"}
-dict = {"2015-09-01":"2015-09-30"}
-ticks = ('February', 'March', 'April', 'May', 'June', 'July', 'August', 'September')
+dict_old = {"2015-02-01":"2015-02-28", "2015-03-01":"2015-03-31", "2015-04-01":"2015-04-30", "2015-05-01":"2015-05-31", "2015-06-01":"2015-06-30", "2015-07-01":"2015-07-31", "2015-08-01":"2015-08-31", "2015-09-01":"2015-09-30"}
+dict = {"2015-10-01":"2015-10-31"}
+ticks = ('February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October')
 
 #DO NOT CHANGE-------------------------------------------
 logging.basicConfig(level=logging.INFO)
@@ -400,7 +400,7 @@ rects2 = plt.bar(index + bar_width, means_closed, bar_width,alpha=opacity,color=
 
 plt.xlabel('Time')
 plt.ylabel('Work (Cards & Blueprints)')
-plt.title('Premium Services Engineering: Work Summary')
+#plt.title('Premium Services Engineering: Work Summary')
 plt.grid(zorder=0)
 plt.xticks(index + bar_width, ticks)
 plt.ylim(0,40)
