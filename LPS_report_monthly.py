@@ -344,7 +344,7 @@ rects2 = plt.bar(index + bar_width, means_closed, bar_width,alpha=opacity,color=
 
 plt.xlabel('Time')
 plt.ylabel('Work (Cards & Blueprints)')
-plt.title('Premium Services Engineering: Work Summary')
+#plt.title('Premium Services Engineering: Work Summary')
 plt.grid(zorder=0)
 plt.xticks(index + bar_width, ticks)
 plt.ylim(0,40)
