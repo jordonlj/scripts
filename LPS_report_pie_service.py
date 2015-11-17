@@ -306,7 +306,7 @@ username = 'jason.liu@linaro.org'
 password = 'xxxx'
 jira = JIRA(options={'server': server}, basic_auth=(username, password))
 
-since = '2015-09-01'
+since = '2015-08-01'
 until = '2015-09-30'
 
 def worklog(issues):
@@ -333,6 +333,7 @@ def worklog(issues):
                   
 labels=[]
 sizes=[]
+colors=[]
 wl=[]
 # member---------------------------
 query = 'project = PSE AND component = "Member Build"'
@@ -412,42 +413,48 @@ for i in range(len(wl)):
     if wl[i] == w_1 and wl[i]!= 0 and flag1 == 0:
         labels.append('Member Build (%1.1f%%)' %(100*(w_1/float(w))))
         sizes.append(w_1)
+        colors.append('green')
         flag1 = 1
     if wl[i] == w_2 and wl[i]!= 0 and flag2 == 0:
         labels.append('96Boards (%1.1f%%)' %(100*(w_2/float(w))))
         sizes.append(w_2)
+        colors.append('yellowgreen')
         flag2 = 1
     if wl[i] == w_3 and wl[i]!= 0 and flag3 == 0:
         labels.append('Uncategorized engineering work (%1.1f%%)' %(100*(w_3/float(w))))
         sizes.append(w_3)
+        colors.append('gold')
         flag3 = 1
     if wl[i] == w_4 and wl[i]!= 0 and flag4 == 0:
         labels.append('LAVA (%1.1f%%)' %(100*(w_4/float(w))))
         sizes.append(w_4)
+        colors.append('lightskyblue')
         flag4 = 1
     if wl[i] == w_5 and wl[i]!= 0 and flag5 == 0:
         labels.append('Training (%1.1f%%)' %(100*(w_5/float(w))))
         sizes.append(w_5)
+        colors.append('lightcoral')
         flag5 = 1
     if wl[i] == w_6 and wl[i]!= 0 and flag6 == 0:
         labels.append('BSP Analysis (%1.1f%%)' %(100*(w_6/float(w))))
         sizes.append(w_6)
+        colors.append('lightgreen')
         flag6 = 1
     if wl[i] == w_7 and wl[i]!= 0 and flag7 == 0:
         labels.append('Upstream Consultancy (%1.1f%%)' %(100*(w_7/float(w))))
         sizes.append(w_7)
+        colors.append('pink')
         flag7 = 1
 
 # The slices will be ordered and plotted counter-clockwise.
-colors = ['green', 'yellowgreen', 'gold', 'lightskyblue', 'lightcoral', 'lightgreen', 'pink']
 patches, texts = plt.pie(sizes, colors=colors, startangle=90)
 plt.legend(patches, labels, loc="best")
-leg = plt.gca().get_legend()
-ltext  = leg.get_texts()
-plt.setp(ltext, fontsize='small')
+#leg = plt.gca().get_legend()
+#ltext  = leg.get_texts()
+#plt.setp(ltext, fontsize='small')
 
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: Sep 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Premium Services: Work Summary By Service Type' + '\n' + '\n')
+plt.text(0.6, -1.2, 'Period: Aug-Sep 2015', color='black', fontsize=14)#, fontweight='bold')
+#plt.title('Premium Services: Work Summary By Service Type' + '\n' + '\n')
 
 plt.show()
