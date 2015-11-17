@@ -333,6 +333,7 @@ def worklog(issues):
                         
 labels=[]
 sizes=[]
+colors=[]
 wl=[]
 # member---------------------------
 query = 'project = PSE AND component = Actions'
@@ -422,47 +423,54 @@ for i in range(len(wl)):
     if wl[i] == w_1 and wl[i]!= 0 and flag1 == 0:
         labels.append('Actions (%1.1f%%)' %(100*(w_1/float(w))))
         sizes.append(w_1)
+        colors.append('green')
         flag1 = 1
     if wl[i] == w_2 and wl[i]!= 0 and flag2 == 0:
         labels.append('Hisilicon (%1.1f%%)' %(100*(w_2/float(w))))
         sizes.append(w_2)
+        colors.append('yellowgreen')
         flag2 = 1
     if wl[i] == w_3 and wl[i]!= 0 and flag3 == 0:
         labels.append('Linaro (%1.1f%%)' %(100*(w_3/float(w))))
         sizes.append(w_3)
+        colors.append('gold')
         flag3 = 1
     if wl[i] == w_4 and wl[i]!= 0 and flag4 == 0:
         labels.append('MediaTek (%1.1f%%)' %(100*(w_4/float(w))))
         sizes.append(w_4)
+        colors.append('yellow')
         flag4 = 1
     if wl[i] == w_5 and wl[i]!= 0 and flag5 == 0:
         labels.append('Qualcomm (%1.1f%%)' %(100*(w_5/float(w))))
         sizes.append(w_5)
+        colors.append('lightskyblue')
         flag5 = 1
     if wl[i] == w_6 and wl[i]!= 0 and flag6 == 0:
         labels.append('Spreadtrum (%1.1f%%)' %(100*(w_6/float(w))))
         sizes.append(w_6)
+        colors.append('blue')
         flag6 = 1
     if wl[i] == w_7 and wl[i]!= 0 and flag7 == 0:
         labels.append('TI (%1.1f%%)' %(100*(w_7/float(w))))
         sizes.append(w_7)
+        colors.append('lightcoral')
         flag7 = 1
     if wl[i] == w_8 and wl[i]!= 0 and flag8 == 0:
         labels.append('ZTE (%1.1f%%)' %(100*(w_8/float(w))))
         sizes.append(w_8)
+        colors.append('pink')
         flag8 = 1
 
 
 # The slices will be ordered and plotted counter-clockwise.
-colors = ['green', 'yellowgreen', 'gold', 'yellow', 'lightskyblue', 'blue', 'lightcoral', 'pink']
 patches, texts = plt.pie(sizes, colors=colors, startangle=90)
 plt.legend(patches, labels, loc="best")
-leg = plt.gca().get_legend()
-ltext  = leg.get_texts()
-plt.setp(ltext, fontsize='small')
+#leg = plt.gca().get_legend()
+#ltext  = leg.get_texts()
+#plt.setp(ltext, fontsize='small')
 
 plt.axis('equal')
-plt.text(0.6, -1.2, 'Period: Aug-Sep 2015', color='black', fontsize=12, fontweight='bold')
-plt.title('Premium Services: Work Summary By Member' + '\n' + '\n')
+plt.text(0.6, -1.2, 'Period: Aug-Sep 2015', color='black', fontsize=14)#, fontweight='bold')
+#plt.title('Premium Services: Work Summary By Member' + '\n' + '\n')
 
 plt.show()
